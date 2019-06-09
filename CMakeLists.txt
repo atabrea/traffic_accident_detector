@@ -8,7 +8,6 @@ FIND_PACKAGE(OpenCV REQUIRED world)
 LIST(APPEND SRCS
     detect/ObjectDetector.cpp
     detect/ObjectDetector.hpp
-    detect/ObjectTracker.cpp
     detect/ObjectTracker.hpp)
 
 foreach(SRC IN LISTS SRCS)
@@ -22,4 +21,8 @@ TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${OpenCV_LIBS})
 
 ADD_EXECUTABLE(multi_tracker src/multiTracker.cpp)
 TARGET_LINK_LIBRARIES(multi_tracker ${OpenCV_LIBS})
+
+ADD_EXECUTABLE(urlcap src/urlcap.cpp)
+TARGET_LINK_LIBRARIES(urlcap ${OpenCV_LIBS})
+
 

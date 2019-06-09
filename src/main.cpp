@@ -7,6 +7,7 @@
 #include <iostream>
 
 #include "detect/ObjectDetector.hpp"
+#include "detect/ObjectTracker.hpp"
 
 const char* keys =
 "{help h usage ? | | Usage examples: \n\t\t./object_detection_yolo.out --image=dog.jpg \n\t\t./object_detection_yolo.out --video=run_sm.mp4}"
@@ -61,7 +62,7 @@ int main(int argc, char** argv)
             outputFile = str;
         }
         // Open the webcaom
-        else cap.open(parser.get<int>("device"));
+        else cap.open(0);
         
     }
     catch(...) {
@@ -76,8 +77,10 @@ int main(int argc, char** argv)
     
     // Create a window
     static const string kWinName = "Traffic Accident Detector";
-    namedWindow(kWinName, WINDOW_NORMAL);
+    namedWindow(kWinName, WINDOW_FULLSCREEN);
+    moveWindow(kWinName, 0, 0);
 
+    detect::ObjectTracker<cv::TrackerMedianFlow> objTracker;
 
     int frames = 0;
     auto start = chrono::steady_clock::now();
@@ -91,13 +94,26 @@ int main(int argc, char** argv)
         // Stop the program if reached end of video
         if (frame.empty()) {
             cout << "Done processing !!!" << endl;
-            cout << "Output file is stored as " << outputFile << endl;
-            waitKey(3000);
+//            cout << "Output file is stored as " << outputFile << endl;
+            //waitKey(3000);
             break;
         }
-        frames++;
         
-        objDetector.processFrame(frame);
+        if(frames % 5 == 0)
+        {
+            std::vector<cv::Rect> boxes = objDetector.processFrame(frame);
+
+            objTracker.addTrackers(frame, boxes);
+        }
+
+        objTracker.updateTrackers(frame);
+
+        auto& boxes = objTracker.getBoxes();
+
+        for(auto& box : boxes)
+        {
+            rectangle(frame, box, Scalar(255, 0, 0), 2, 1);
+        }
         
         // Put efficiency information.
         double t = objDetector.getPerfProfile();
@@ -111,6 +127,7 @@ int main(int argc, char** argv)
 //        else video.write(detectedFrame);
         
         imshow(kWinName, frame);
+        frames++;
     }
 
     auto end = chrono::steady_clock::now();

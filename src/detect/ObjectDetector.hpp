@@ -32,8 +32,7 @@ public:
     // The function getPerfProfile returns the overall time for inference(t)
     double getPerfProfile();
 
-    // Remove the bounding boxes with low confidence using non-maxima suppression
-    void processFrame(Mat& frame);
+    vector<Rect> processFrame(Mat& frame);
 
     // Draw the predicted bounding box
     void drawPred(int classId, float conf, int left, int top, int right,
@@ -45,7 +44,7 @@ private:
     int inpWidth = 416;  // Width of network's input image
     int inpHeight = 416; // Height of network's input image
     float confThreshold = 0.1; // Confidence threshold
-    float nmsThreshold = 0.4;  // Non-maximum suppression threshold
+    float nmsThreshold = 0.9;  // Non-maximum suppression threshold
 
     // Give the configuration and weight files for the model
     String modelConfiguration = "detector.cfg";

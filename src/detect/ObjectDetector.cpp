@@ -1,4 +1,5 @@
 #include <fstream>
+#include <iostream>
 
 #include "detect/ObjectDetector.hpp"
 
@@ -68,7 +69,7 @@ double ObjectDetector::getPerfProfile()
     return net.getPerfProfile(layersTimes) / freq;
 }
 
-void ObjectDetector::processFrame(Mat &frame)
+vector<Rect> ObjectDetector::processFrame(Mat &frame)
 {
     vector<int> classIds;
     vector<float> confidences;
@@ -113,9 +114,11 @@ void ObjectDetector::processFrame(Mat &frame)
     {
         int idx = indices[i];
         Rect box = boxes[idx];
-        drawPred(classIds[idx], confidences[idx], box.x, box.y,
-                 box.x + box.width, box.y + box.height, frame);
+//        drawPred(classIds[idx], confidences[idx], box.x, box.y,
+//                 box.x + box.width, box.y + box.height, frame);
     }
+
+    return boxes;
 }
 
 void ObjectDetector::drawPred(int classId, float conf, int left, int top,
