@@ -1,7 +1,3 @@
-// This code is written at BigVision LLC. It is based on the OpenCV project. It is subject to the license terms in the LICENSE file found in this distribution and at http://opencv.org/license.html
-
-// Usage example:  ./object_detection_yolo.out --video=run.mp4
-//                 ./object_detection_yolo.out --image=bird.jpg
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -10,7 +6,7 @@
 #include "detect/ObjectTracker.hpp"
 
 const char* keys =
-"{help h usage ? | | Usage examples: \n\t\t./object_detection_yolo.out --image=dog.jpg \n\t\t./object_detection_yolo.out --video=run_sm.mp4}"
+"{help h usage ? | | Usage example }"
 "{image i        |<none>| input image   }"
 "{video v       |<none>| input video   }"
 ;
